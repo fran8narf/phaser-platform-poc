@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import initAnimations from './playerAnims';
 
 class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y) {
@@ -18,6 +19,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.body.setGravityY(this.gravity);
         this.setCollideWorldBounds(true);
         console.log(this.cursors);
+        initAnimations(this.scene.anims);
     }
 
     initEvents() {
@@ -48,6 +50,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         if (left.isDown) {
             this.setVelocityX(-this.playerSpeed);
         } else if (right.isDown) {
+            this.play('run-right', true);
             this.setVelocityX(this.playerSpeed);
         } else if (up.isDown) {
             this.setVelocityY(-this.playerSpeed);
@@ -55,7 +58,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         } else {
             this.setVelocityX(0);
         }
+        // don't play again if the animation is still playing
+        // ignoreIfPlaying === true
     }
+
+    
 }
 
 export default Player;
