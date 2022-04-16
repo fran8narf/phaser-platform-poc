@@ -9,7 +9,11 @@ class Preload extends Phaser.Scene {
         this.load.image('tileset1', 'assets/tileset1.png');
         this.load.image('tileset2', 'assets/tileset2.png');
 
-        this.load.image('player', 'assets/player/movements/idle01.png');
+        // this.load.image('player', 'assets/player/movements/idle01.png');
+        this.load.spritesheet('player', 'assets/player/move_sprite_1.png', {
+            frameWidth: 64,
+            frameHeight: 38
+        });
     }
 
     create() {
