@@ -1,7 +1,7 @@
 export default anims => {
     anims.create({
         key: 'idle',
-        frames: anims.generateFrameNumbers('player', { start: 0, end: 7 }),
+        frames: anims.generateFrameNumbers('player', { start: 0, end: 8 }),
         frameRate: 10,
         repeat : -1
     });
