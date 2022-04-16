@@ -60,6 +60,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
         // don't play again if the animation is still playing
         // ignoreIfPlaying === true
+        // this.play('idle', true);
+        this.play('idle', true);
     }
 
     
