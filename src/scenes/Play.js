@@ -4,7 +4,6 @@ import Player from '../entities/Player';
 class Play extends Phaser.Scene {
     constructor() {
         super('PlayScene');
-        this.playerSpeed = 160;
     }
 
     create() {
@@ -13,7 +12,7 @@ class Play extends Phaser.Scene {
 
         this.player = this.createPlayer();
         this.physics.add.collider(this.player, layers.platformColliders);
-
+        this.playerSpeed = 160;
         this.cursors = this.input.keyboard.createCursorKeys();
         console.log(this.cursors);
     }
@@ -22,7 +21,6 @@ class Play extends Phaser.Scene {
         const map = this.make.tilemap({ key: 'map-1' });
         map.addTilesetImage('tileset1', 'tileset1');
         map.addTilesetImage('tileset2', 'tileset2');
-        console.log('map createD?', map);
 
         return map;
     }
@@ -41,8 +39,8 @@ class Play extends Phaser.Scene {
     }
 
     createPlayer() {
-        const player = this.physics.add.sprite(50, 400, 'player');
-        // const player = new Player(50, 400, 'player');
+        // const player = this.physics.add.sprite(50, 400, 'player');
+        const player = new Player(this, 50, 400, 'player');
         player.body.setGravityY(300);
         player.setCollideWorldBounds(true);
 
@@ -57,7 +55,7 @@ class Play extends Phaser.Scene {
         } else if (right.isDown) {
             this.player.setVelocityX(this.playerSpeed);
         } else {
-
+            this.player.setVelocityX(0);
         }
     }
 }
