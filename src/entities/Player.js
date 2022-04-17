@@ -50,6 +50,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     update () {
         const { left, right, up, space, down } = this.cursors;
         const onFloor = this.body.onFloor();
+        const isSpaceJustDown = Phaser.Input.Keyboard.JustDown(space);
+        const isUpJustDown = Phaser.Input.Keyboard.JustDown(up);
         
         if (left.isDown) {
             this.setVelocityX(-this.playerSpeed);
@@ -58,11 +60,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.play('run-right', true);
             this.setVelocityX(this.playerSpeed);
             this.setFlipX(false);
-        } else if ((up.isDown || space.isDown) && onFloor) {
+        } else if ((isUpJustDown || isSpaceJustDown) && (onFloor || this.jumpCount < this.consecutiveJumps)) {
             this.setVelocityY(-this.playerSpeed-200);
-            this.setGravityY(this.gravity);
+            this.jumpCount++;
         } else {
             this.setVelocityX(0);
+        }
+
+        if(onFloor) {
+            this.jumpCount = 0;
         }
         // don't play again if the animation is still playing
         // ignoreIfPlaying === true
