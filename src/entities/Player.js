@@ -45,15 +45,17 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     } */
 
     update () {
-        const { left, right, up, down } = this.cursors;
+        const { left, right, up, space, down } = this.cursors;
         
         if (left.isDown) {
             this.setVelocityX(-this.playerSpeed);
+            this.setFlipX(true);
         } else if (right.isDown) {
             this.play('run-right', true);
             this.setVelocityX(this.playerSpeed);
-        } else if (up.isDown) {
-            this.setVelocityY(-this.playerSpeed);
+            this.setFlipX(false);
+        } else if (up.isDown || space.isDown) {
+            this.setVelocityY(-this.playerSpeed-150);
             this.setGravityY(this.gravity);
         } else {
             this.setVelocityX(0);
@@ -61,7 +63,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // don't play again if the animation is still playing
         // ignoreIfPlaying === true
         // this.play('idle', true);
-        this.play('idle', true);
+
+        this.body.velocity.x !== 0 ?
+            this.play('run-right', true) :
+            this.play('idle', true);
     }
 
     
