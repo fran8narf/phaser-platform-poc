@@ -39,6 +39,9 @@ class Play extends Phaser.Scene {
         const environment = map.createStaticLayer('environment', [getTiledSet1, getTiledSet2]);
         const platforms = map.createStaticLayer('platforms', [getTiledSet1, getTiledSet2]);
 
+        const playerZones = map.getObjectLayer('player-zones');
+        console.log(playerZones);
+
         platformColliders.setCollisionByProperty({collides: true});
         // platformColliders.setCollisionByExclusion( -1, true );
         return { environment, platforms, platformColliders };
@@ -56,7 +59,7 @@ class Play extends Phaser.Scene {
 
     setUpFollowupCameraOn(player) {
         const { width, height, mapOffset } = this.config;
-        this.physics.world.setBounds(0, 0, width + mapOffset, height + 200);
+        this.physics.world.setBounds(0, 0, width + mapOffset, height + 100);
         this.cameras.main.startFollow(player);
         this.cameras.main.setBounds(0, 0, width + mapOffset, height).setZoom(1.5);
     }
