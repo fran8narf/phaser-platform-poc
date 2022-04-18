@@ -214,7 +214,7 @@
                 {
                  "height":0,
                  "id":1,
-                 "name":"start-zone",
+                 "name":"startZone",
                  "point":true,
                  "rotation":0,
                  "type":"",
@@ -226,7 +226,7 @@
                 {
                  "height":0,
                  "id":2,
-                 "name":"finish-zone",
+                 "name":"finishZone",
                  "point":true,
                  "rotation":0,
                  "type":"",
