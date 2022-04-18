@@ -2,11 +2,14 @@ import Phaser from 'phaser';
 import PlayScene from './scenes/Play';
 import PreloadScene from './scenes/Preload';
 
-const WIDTH = 1600;
+const MAP_WIDTH = 1600;
+
+const WIDTH = document.body.offsetWidth;
 const HEIGHT = 625;
 
 
 const SHARED_CONFIG = {
+    mapOffSet: MAP_WIDTH > WIDTH ? MAP_WIDTH - WIDTH : 0,
     width: WIDTH,
     height: HEIGHT
 }
@@ -25,7 +28,7 @@ const config = {
     physics: {
         default: 'arcade',
         arcade: {
-            // debug: true
+            debug: true
         }
     },
     scene: initScenes()

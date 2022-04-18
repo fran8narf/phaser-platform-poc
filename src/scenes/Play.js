@@ -1,43 +1,54 @@
 import Phaser from "phaser";
+import Player from '../entities/Player';
 
 class Play extends Phaser.Scene {
     constructor() {
         super('PlayScene');
-        this.map = null;
     }
 
     create() {
-        this.createMap();
-        const layers = this.createLayers();
+        const map = this.createMap();
+        const layers = this.createLayers(map);
+
         const player = this.createPlayer();
 
-        this.physics.add.collider(player, layers.platformColliders);
+        this.createPlayerColliders(player,
+            {
+                colliders: {
+                    platformColliders: layers.platformColliders
+            }
+        });
     }
     
     createMap() {
-        this.map = this.make.tilemap({ key: 'map-1' });
-        console.log(this.map);
+        const map = this.make.tilemap({ key: 'map-1' });
+        map.addTilesetImage('tileset1', 'tileset1');
+        map.addTilesetImage('tileset2', 'tileset2');
+
+        return map;
     }
     
-    createLayers() {
-        const tileset1 = this.map.addTilesetImage('tileset1', 'tileset1');
-        const tileset2 = this.map.addTilesetImage('tileset2', 'tileset2');
-    
-        const platformColliders = this.map.createStaticLayer('platform-colliders', [tileset1, tileset2]);
-        const environment = this.map.createStaticLayer('environment', [tileset1, tileset2]);
-        const platforms = this.map.createStaticLayer('platforms', [tileset1, tileset2]);
+    createLayers(map) {
+        const getTiledSet1 = map.getTileset('tileset1');
+        const getTiledSet2 = map.getTileset('tileset2');
 
-        platformColliders.setCollisionByExclusion( -1, true );
+        const platformColliders = map.createStaticLayer('platform-colliders', [getTiledSet1, getTiledSet2]);
+        const environment = map.createStaticLayer('environment', [getTiledSet1, getTiledSet2]);
+        const platforms = map.createStaticLayer('platforms', [getTiledSet1, getTiledSet2]);
 
+        platformColliders.setCollisionByProperty({collides: true});
+        // platformColliders.setCollisionByExclusion( -1, true );
         return { environment, platforms, platformColliders };
     }
 
     createPlayer() {
-        const player = this.physics.add.sprite(50, 400, 'player');
-            player.setCollideWorldBounds(true);
-            player.body.setGravityY(300);
+        // old
+        // const player = this.physics.add.sprite(50, 400, 'player');
+        return new Player(this, 50, 510, 'player');
+    }
 
-        return player;
+    createPlayerColliders(player, { colliders }) {
+        player.addCollider(colliders.platformColliders);
     }
 }
 
