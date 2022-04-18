@@ -21,6 +21,8 @@ class Play extends Phaser.Scene {
             }
         });
 
+        this.createEndOfLevel(playerZones.finish);
+
         this.setUpFollowupCameraOn(player);
     }
     
@@ -39,7 +41,7 @@ class Play extends Phaser.Scene {
         const platformColliders = map.createStaticLayer('platform-colliders', [getTiledSet1, getTiledSet2]);
         const environment = map.createStaticLayer('environment', [getTiledSet1, getTiledSet2]);
         const platforms = map.createStaticLayer('platforms', [getTiledSet1, getTiledSet2]);
-
+        console.log(platformColliders);
         const playerZones = map.getObjectLayer('player-zones');
 
         platformColliders.setCollisionByProperty({collides: true});
@@ -70,6 +72,13 @@ class Play extends Phaser.Scene {
             start : zonesObject.find(zone => zone.name === 'startZone'),
             finish : zonesObject.find(zone => zone.name === 'finishZone'),
         }
+    }
+
+    createEndOfLevel(finishZone) {
+        this.physics.add.sprite(finishZone.x, finishZone.y, 'finish')
+            .setAlpha(0)
+            .setSize(5, 200)
+            .setOrigin(0.5, 1);
     }
 }
 
