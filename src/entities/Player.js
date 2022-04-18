@@ -1,6 +1,8 @@
 import Phaser from 'phaser';
 import initAnimations from './playerAnims';
 
+import collidable from '../mixins/collidable';
+
 class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y) {
         super(scene, x, y, 'player');
@@ -9,6 +11,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         scene.physics.add.existing(this);
         this.init();
         this.initEvents();
+
+        // we copy all the collidable methods from the mixin to the player through 'this' context
+        Object.assign(this, collidable);
     }
     
     init() {
@@ -29,23 +34,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // accedemos a los eventos de la scene para que escucha al evento 'quequeramos'
         this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
     }
-
-    //main purpose is for update sprite animations
-    /* update(time, delta) {
-        super.preUpdate(time, delta)
-        const { left, right, up, down } = this.cursors;
-        
-        if (left.isDown) {
-            this.setVelocityX(-this.playerSpeed);
-        } else if (right.isDown) {
-            this.setVelocityX(this.playerSpeed);
-        } else if (up.isDown) {
-            this.setVelocityY(-this.playerSpeed);
-            this.setGravityY(200);
-        } else {
-            this.setVelocityX(0);
-        }
-    } */
 
     update () {
         const { left, right, up, space, down } = this.cursors;
@@ -81,9 +69,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         }
 
-        addCollider(gameObject, callback) {
-            this.scene.physics.add.collider(this, gameObject, callback,  null, this);
-        }
+        
 }
 
 export default Player;
