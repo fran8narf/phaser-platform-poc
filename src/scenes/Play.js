@@ -54,6 +54,8 @@ class Play extends Phaser.Scene {
         const platforms = map.createStaticLayer('platforms', [getTiledSet1, getTiledSet2]);
 
         const playerZones = map.getObjectLayer('player-zones');
+        const enemySpawnPoints = map.getObjectLayer('enemy-spawn-points');
+        console.log('enemySpawnPoints', enemySpawnPoints);
 
         platformColliders.setCollisionByProperty({collides: true});
         // platformColliders.setCollisionByExclusion( -1, true );
