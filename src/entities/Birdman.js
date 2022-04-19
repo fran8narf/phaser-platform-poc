@@ -1,30 +1,8 @@
-import Phaser from 'phaser';
-import collidable from '../mixins/collidable';
+import Enemy from './Enemy';
 
-class Birdman extends Phaser.Physics.Arcade.Sprite {
+class Birdman extends Enemy {
     constructor(scene, x, y) {
         super(scene, x, y, 'birdman');
-
-        scene.add.existing(this);
-        scene.physics.add.existing(this);
-        this.init();
-
-        // we copy all the collidable methods from the mixin to the player through 'this' context
-        Object.assign(this, collidable);
-    }
-    
-    init() {
-        this.gravity = 700;
-        this.speed = 160;
-
-        this.body.setGravityY(this.gravity);
-        this.setSize(this.width-5, this.height-20);
-        this.setOffset(5, 20);
-        this.setCollideWorldBounds(true);
-        this.setImmovable(true);
-    }
-
-    update () {
     }
 }
 
