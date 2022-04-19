@@ -67,9 +67,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.play('run-right', true) : this.play('idle', true) :
             this.play('jump', true);
 
-        }
-
-        
+    }  
 }
 
 export default Player;
