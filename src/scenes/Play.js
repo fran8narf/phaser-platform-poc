@@ -2,15 +2,17 @@ import Phaser from "phaser";
 import Player from '../entities/Player';
 
 class Play extends Phaser.Scene {
-    constructor() {
+    constructor(config) {
         super('PlayScene');
+        this.config = config;
     }
 
     create() {
         const map = this.createMap();
         const layers = this.createLayers(map);
+        const playerZones = this.getPlayerZones(layers.playerZones);
 
-        const player = this.createPlayer();
+        const player = this.createPlayer(playerZones.start);
 
         this.createPlayerColliders(player,
             {
@@ -18,6 +20,10 @@ class Play extends Phaser.Scene {
                     platformColliders: layers.platformColliders
             }
         });
+
+        this.createEndOfLevel(playerZones.finish, player);
+
+        this.setUpFollowupCameraOn(player);
     }
     
     createMap() {
@@ -36,19 +42,48 @@ class Play extends Phaser.Scene {
         const environment = map.createStaticLayer('environment', [getTiledSet1, getTiledSet2]);
         const platforms = map.createStaticLayer('platforms', [getTiledSet1, getTiledSet2]);
 
+        const playerZones = map.getObjectLayer('player-zones');
+
         platformColliders.setCollisionByProperty({collides: true});
         // platformColliders.setCollisionByExclusion( -1, true );
-        return { environment, platforms, platformColliders };
+        return { environment, platforms, platformColliders, playerZones };
     }
 
-    createPlayer() {
+    createPlayer(start) {
         // old
         // const player = this.physics.add.sprite(50, 400, 'player');
-        return new Player(this, 50, 510, 'player');
+        return new Player(this, start.x, start.y, 'player');
     }
 
     createPlayerColliders(player, { colliders }) {
         player.addCollider(colliders.platformColliders);
+    }
+
+    setUpFollowupCameraOn(player) {
+        const { width, height, mapOffset } = this.config;
+        this.physics.world.setBounds(0, 0, width + mapOffset, height + 100);
+        this.cameras.main.startFollow(player);
+        this.cameras.main.setBounds(0, 0, width + mapOffset, height).setZoom(1.5);
+    }
+
+    getPlayerZones(playerZones) {
+        const zonesObject = playerZones.objects;
+        return {
+            start : zonesObject.find(zone => zone.name === 'startZone'),
+            finish : zonesObject.find(zone => zone.name === 'finishZone'),
+        }
+    }
+
+    createEndOfLevel(finishZone, player) {
+        const endOfLevel = this.physics.add.sprite(finishZone.x, finishZone.y, 'finish')
+            .setAlpha(0)
+            .setSize(5, this.config.height)
+            .setOrigin(0.5, 1);
+
+        const endOfLevelOverlap = this.physics.add.overlap(player, endOfLevel, () => {
+            endOfLevelOverlap.active = false;
+            console.log('you have passed the level!!');
+        });
     }
 }
 
