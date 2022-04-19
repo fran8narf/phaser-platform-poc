@@ -22,6 +22,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.setOffset(5, 20);
         this.setCollideWorldBounds(true);
         this.setImmovable(true);
+        this.setOrigin(.5, 1);
     }
 
     update () {
