@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import Player from '../entities/Player';
+import Enemies from "../groups/Enemies";
 
 import { getEnemyType } from '../types';
 
@@ -71,17 +72,20 @@ class Play extends Phaser.Scene {
     }
 
     createEnemies(spawnLayer) {
-        const enemyTypes = getEnemyType();
-        return spawnLayer.objects.map(enemy => {
-            return new enemyTypes[enemy.type](this, enemy.x, enemy.y, 'birdman');
-        }); 
+        const enemies = new Enemies(this);
+        const enemyTypes = enemies.getTypes();
+
+        spawnLayer.objects.forEach(spawnPoint => {
+            const enemy = new enemyTypes[spawnPoint.type](this, spawnPoint.x, spawnPoint.y, 'birdman');
+            enemies.add(enemy);
+        });
+
+        return enemies;
     }
     createEnemyColliders(enemies, { colliders }) {
-        enemies.forEach(enemy => {
-            enemy.addCollider(colliders.platformColliders);
-            console.log(colliders.player);
-            enemy.addCollider(colliders.player);
-        });
+        enemies
+            .addCollider(colliders.platformColliders)
+            .addCollider(colliders.player);
     }
 
     createPlayerColliders(player, { colliders }) {

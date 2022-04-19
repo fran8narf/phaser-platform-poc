@@ -1,6 +1,4 @@
 import Birdman from "../entities/Birdman"
-export const getEnemyType = () => {
-    return {
-        Birdman
-    }
+export const ENEMY_TYPES = {
+    Birdman
 };
