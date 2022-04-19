@@ -8,6 +8,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         scene.add.existing(this);
         scene.physics.add.existing(this);
         this.init();
+        this.initEvents();
 
         // we copy all the collidable methods from the mixin to the player through 'this' context
         Object.assign(this, collidable);
@@ -25,7 +26,12 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.setOrigin(.5, 1);
     }
 
-    update () {
+    initEvents() {
+        // accedemos a los eventos de la scene para que escucha al evento 'quequeramos'
+        this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
+    }
+
+    update (time, delta) {
     }
 }
 
