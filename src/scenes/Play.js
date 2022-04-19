@@ -23,11 +23,12 @@ class Play extends Phaser.Scene {
         });
 
         //setting up enemies
-        const enemy = this.createEnemy();
+        const enemy = this.createEnemy(playerZones.start);
         this.createEnemyColliders(enemy,
             {
                 colliders: {
-                    platformColliders: layers.platformColliders
+                    platformColliders: layers.platformColliders,
+                player
             }
         });
 
@@ -65,11 +66,13 @@ class Play extends Phaser.Scene {
         return new Player(this, start.x, start.y, 'player');
     }
 
-    createEnemy() {
-        return new Birdman(this, 100, 50, 'birdman');
+    createEnemy(start) {
+        return new Birdman(this, start.x + 150, start.y -100, 'birdman');
     }
     createEnemyColliders(enemy, { colliders }) {
         enemy.addCollider(colliders.platformColliders);
+        console.log(colliders.player);
+        enemy.addCollider(colliders.player);
     }
 
     createPlayerColliders(player, { colliders }) {
