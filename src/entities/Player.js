@@ -50,12 +50,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.play('run-right', true);
             this.setVelocityX(this.playerSpeed);
             this.setFlipX(false);
-        } else if ((isUpJustDown || isSpaceJustDown) && (onFloor || this.jumpCount < this.consecutiveJumps)) {
-            this.setVelocityY(-this.playerSpeed-200);
-            this.jumpCount++;
         } else {
             this.setVelocityX(0);
         }
+        
+        if ((isUpJustDown || isSpaceJustDown) && (onFloor || this.jumpCount < this.consecutiveJumps)) {
+            this.setVelocityY(-this.playerSpeed-200);
+            this.jumpCount++;
+        } 
 
         if(onFloor) {
             this.jumpCount = 0;
@@ -69,7 +71,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.play('run-right', true) : this.play('idle', true) :
             this.play('jump', true);
 
-    }  
+    }
+
+    takesHit(enemy) {
+        console.log('takes hit');
+        console.log(enemy);
+    }
 }
 
 export default Player;
