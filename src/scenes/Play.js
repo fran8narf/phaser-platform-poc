@@ -41,17 +41,36 @@ class Play extends Phaser.Scene {
         this.graphics = this.add.graphics();
 
         this.line = new Phaser.Geom.Line();
-        this.graphics.lineStyle(2, 0xffffff);
+        this.graphics.lineStyle(2, 0x00ff00);
+        this.plotting = false;
 
         this.input.on('pointerdown', this.startDrawing, this);
         this.input.on('pointerup', this.stopDrawing, this);
     }
 
-    startDrawing() {
-        console.log('start drawing');
+    update() {
+        if (this.plotting) {
+            const pointer = this.input.activePointer;
+            this.line.x2 = pointer.worldX;
+            this.line.y2 = pointer.worldY;
+            
+            this.graphics.clear();
+            //clear was removing lineStyle
+            this.graphics.lineStyle(2, 0x00ff00);
+            this.graphics.strokeLineShape(this.line);
+            console.log(this.line);
+        }
     }
-    stopDrawing() {
-        console.log('stop drawing');
+
+    startDrawing(pointer) {
+        this.line.x1 = pointer.worldX;;
+        this.line.y1 = pointer.worldY;
+        this.plotting = true;
+    }
+    stopDrawing(pointer) {
+        /* this.line.x2 = pointer.worldX;;
+        this.line.y2 = pointer.worldY; */
+        this.plotting = false;
     }
     
     createMap() {
