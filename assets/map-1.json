@@ -99,7 +99,7 @@
          "name":"platforms",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":100,
          "x":0,
          "y":0
@@ -118,8 +118,8 @@
                  "type":"Birdman",
                  "visible":true,
                  "width":0,
-                 "x":239,
-                 "y":460.75
+                 "x":187.25,
+                 "y":478
                 }, 
                 {
                  "height":0,
@@ -130,20 +130,8 @@
                  "type":"Birdman",
                  "visible":true,
                  "width":0,
-                 "x":722,
-                 "y":366.5
-                }, 
-                {
-                 "height":0,
-                 "id":6,
-                 "name":"Spawn",
-                 "point":true,
-                 "rotation":0,
-                 "type":"Birdman",
-                 "visible":true,
-                 "width":0,
-                 "x":524,
-                 "y":208.666666666667
+                 "x":715,
+                 "y":382.75
                 }, 
                 {
                  "height":0,
@@ -154,8 +142,8 @@
                  "type":"Birdman",
                  "visible":true,
                  "width":0,
-                 "x":366.666666666667,
-                 "y":213.75
+                 "x":362.416666666667,
+                 "y":223
                 }, 
                 {
                  "height":0,
@@ -166,8 +154,8 @@
                  "type":"Birdman",
                  "visible":true,
                  "width":0,
-                 "x":638.75,
-                 "y":81.5
+                 "x":634.75,
+                 "y":91
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -291,8 +279,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":57.3333333333333,
-                 "y":536.333333333333
+                 "x":300.666666666667,
+                 "y":219
                 }, 
                 {
                  "height":0,

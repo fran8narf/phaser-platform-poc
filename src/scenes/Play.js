@@ -25,7 +25,7 @@ class Play extends Phaser.Scene {
         });
 
         //setting up enemies
-        const enemies = this.createEnemies(layers.enemySpawnPoints);
+        const enemies = this.createEnemies(layers.enemySpawnPoints, layers.platformColliders);
         this.createEnemyColliders(enemies,
             {
                 colliders: {
@@ -37,37 +37,10 @@ class Play extends Phaser.Scene {
         this.createEndOfLevel(playerZones.finish, player);
 
         this.setUpFollowupCameraOn(player);
-
-        this.graphics = this.add.graphics();
-
-        this.line = new Phaser.Geom.Line();
-        this.graphics.lineStyle(1, 0x00ff00);
-        this.plotting = false;
-
-        this.input.on('pointerdown', this.startDrawing, this);
-        this.input.on('pointerup', (pointer) => {
-            this.stopDrawing(pointer, layers.platforms)
-        }, this);
     }
 
-    update() {
-        if (this.plotting) {
-            const pointer = this.input.activePointer;
-            this.line.x2 = pointer.worldX;
-            this.line.y2 = pointer.worldY;
-            
-            this.graphics.clear();
-            //clear was removing lineStyle
-            this.graphics.lineStyle(1, 0x00ff00);
-            this.graphics.strokeLineShape(this.line);
-        }
-    }
+    update() {}
 
-    startDrawing(pointer) {
-        this.line.x1 = pointer.worldX;;
-        this.line.y1 = pointer.worldY;
-        this.plotting = true;
-    }
     stopDrawing(pointer, layer) {
         this.line.x2 = pointer.worldX;;
         this.line.y2 = pointer.worldY;
@@ -77,9 +50,10 @@ class Play extends Phaser.Scene {
         // we check if the platforms are hit by the line
         if (this.tileHits.length > 0) {
             this.tileHits.forEach(tile => {
-                tile.index !== -1 ? console.log('platform hit') : '';
+                tile.index !== -1 ? tile.setCollision(true) : '';
             });
         }
+
         this.plotting = false;
     }
     
@@ -115,12 +89,13 @@ class Play extends Phaser.Scene {
         return new Player(this, start.x, start.y, 'player');
     }
 
-    createEnemies(spawnLayer) {
+    createEnemies(spawnLayer, platformCollidersLayer) {
         const enemies = new Enemies(this);
         const enemyTypes = enemies.getTypes();
 
-        spawnLayer.objects.forEach(spawnPoint => {
+        spawnLayer.objects.forEach((spawnPoint, i) => {
             const enemy = new enemyTypes[spawnPoint.type](this, spawnPoint.x, spawnPoint.y, 'birdman');
+            enemy.setPlatformColliders(platformCollidersLayer);
             enemies.add(enemy);
         });
 

@@ -16,7 +16,15 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     
     init() {
         this.gravity = 700;
-        this.speed = 160;
+        this.speed = 80;
+        this.rayGraphics = this.scene.add.graphics({
+            lineStyle : {
+                width : 2,
+                color : 0xaa00aa
+            }
+        });
+
+        this.platformCollidersLayer = null;
 
         this.body.setGravityY(this.gravity);
         this.setSize(this.width-5, this.height-20);
@@ -24,6 +32,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.setCollideWorldBounds(true);
         this.setImmovable(true);
         this.setOrigin(.5, 1);
+        this.setVelocity(this.speed);
     }
 
     initEvents() {
@@ -32,6 +41,18 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     }
 
     update (time, delta) {
+        const { ray, hasHit  } = this.raycast(this.body, this.platformCollidersLayer, 30, 10);
+
+        if (!hasHit) {
+            this.setFlipX(!this.flipX);
+            this.setVelocityX(this.speed = -this.speed); 
+        }
+        this.rayGraphics.clear();
+        this.rayGraphics.strokeLineShape(ray);
+    }
+
+    setPlatformColliders(platformCollidersLayer) {
+        this.platformCollidersLayer = platformCollidersLayer;
     }
 }
 
