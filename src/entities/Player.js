@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import initAnimations from './playerAnims';
+import initAnimations from './anims/playerAnims';
 
 import collidable from '../mixins/collidable';
 
@@ -25,6 +25,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.consecutiveJumps = 1;
 
         this.body.setGravityY(this.gravity);
+        this.setSize(this.width-6, this.height -1);
+        this.setOffset(6, 1);
         this.setCollideWorldBounds(true);
 
         initAnimations(this.scene.anims);
@@ -67,9 +69,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.play('run-right', true) : this.play('idle', true) :
             this.play('jump', true);
 
-        }
-
-        
+    }  
 }
 
 export default Player;

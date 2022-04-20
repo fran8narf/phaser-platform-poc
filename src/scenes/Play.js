@@ -1,5 +1,8 @@
 import Phaser from "phaser";
 import Player from '../entities/Player';
+import Enemies from "../groups/Enemies";
+
+import { getEnemyType } from '../types';
 
 class Play extends Phaser.Scene {
     constructor(config) {
@@ -12,8 +15,8 @@ class Play extends Phaser.Scene {
         const layers = this.createLayers(map);
         const playerZones = this.getPlayerZones(layers.playerZones);
 
+        //setting up player
         const player = this.createPlayer(playerZones.start);
-
         this.createPlayerColliders(player,
             {
                 colliders: {
@@ -21,9 +24,37 @@ class Play extends Phaser.Scene {
             }
         });
 
+        //setting up enemies
+        const enemies = this.createEnemies(layers.enemySpawnPoints, layers.platformColliders);
+        this.createEnemyColliders(enemies,
+            {
+                colliders: {
+                    platformColliders: layers.platformColliders,
+                player
+            }
+        });
+
         this.createEndOfLevel(playerZones.finish, player);
 
         this.setUpFollowupCameraOn(player);
+    }
+
+    update() {}
+
+    stopDrawing(pointer, layer) {
+        this.line.x2 = pointer.worldX;;
+        this.line.y2 = pointer.worldY;
+
+        this.tileHits = layer.getTilesWithinShape(this.line);
+
+        // we check if the platforms are hit by the line
+        if (this.tileHits.length > 0) {
+            this.tileHits.forEach(tile => {
+                tile.index !== -1 ? tile.setCollision(true) : '';
+            });
+        }
+
+        this.plotting = false;
     }
     
     createMap() {
@@ -34,6 +65,7 @@ class Play extends Phaser.Scene {
         return map;
     }
     
+    //adding all the layers to the scene
     createLayers(map) {
         const getTiledSet1 = map.getTileset('tileset1');
         const getTiledSet2 = map.getTileset('tileset2');
@@ -43,16 +75,36 @@ class Play extends Phaser.Scene {
         const platforms = map.createStaticLayer('platforms', [getTiledSet1, getTiledSet2]);
 
         const playerZones = map.getObjectLayer('player-zones');
+        const enemySpawnPoints = map.getObjectLayer('enemy-spawn-points');
+        console.log('enemySpawnPoints', enemySpawnPoints);
 
         platformColliders.setCollisionByProperty({collides: true});
         // platformColliders.setCollisionByExclusion( -1, true );
-        return { environment, platforms, platformColliders, playerZones };
+        return { environment, platforms, platformColliders, playerZones, enemySpawnPoints };
     }
 
     createPlayer(start) {
         // old
         // const player = this.physics.add.sprite(50, 400, 'player');
         return new Player(this, start.x, start.y, 'player');
+    }
+
+    createEnemies(spawnLayer, platformCollidersLayer) {
+        const enemies = new Enemies(this);
+        const enemyTypes = enemies.getTypes();
+
+        spawnLayer.objects.forEach((spawnPoint, i) => {
+            const enemy = new enemyTypes[spawnPoint.type](this, spawnPoint.x, spawnPoint.y, 'birdman');
+            enemy.setPlatformColliders(platformCollidersLayer);
+            enemies.add(enemy);
+        });
+
+        return enemies;
+    }
+    createEnemyColliders(enemies, { colliders }) {
+        enemies
+            .addCollider(colliders.platformColliders)
+            .addCollider(colliders.player);
     }
 
     createPlayerColliders(player, { colliders }) {
