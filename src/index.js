@@ -12,7 +12,7 @@ const SHARED_CONFIG = {
     mapOffSet: MAP_WIDTH > WIDTH ? MAP_WIDTH - WIDTH : 0,
     width: WIDTH,
     height: HEIGHT,
-    debug : false
+    debug : true
 }
 
 const Scenes = [

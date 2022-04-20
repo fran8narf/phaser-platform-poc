@@ -24,7 +24,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.jumpCount = 0;
         this.consecutiveJumps = 1;
         this.hasBeenHit = false;
-        this.bounceVelocity = 250;
+        this.bounceVelocity = 350;
 
         this.body.setGravityY(this.gravity);
         this.setSize(this.width-6, this.height -1);
@@ -93,11 +93,23 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }); */
     }
     bounceOff() {
+        this.playDamageTween();
         this.body.touching.right ? 
             this.setVelocityX(-this.bounceVelocity) :
             this.setVelocityX(this.bounceVelocity);
 
         setTimeout(() => { this.setVelocityY(-this.bounceVelocity), 0 });
+    }
+
+    playDamageTween() {
+        console.log('playing tween?');
+        this.scene.tweens.add({
+            targets: this,
+            duration : 100,
+            repeat: 4,
+            tint : 0xffffff
+        });
+        console.log(this);
     }
 }
 
