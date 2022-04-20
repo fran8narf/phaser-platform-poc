@@ -41,11 +41,13 @@ class Play extends Phaser.Scene {
         this.graphics = this.add.graphics();
 
         this.line = new Phaser.Geom.Line();
-        this.graphics.lineStyle(2, 0x00ff00);
+        this.graphics.lineStyle(1, 0x00ff00);
         this.plotting = false;
 
         this.input.on('pointerdown', this.startDrawing, this);
-        this.input.on('pointerup', this.stopDrawing, this);
+        this.input.on('pointerup', (pointer) => {
+            this.stopDrawing(pointer, layers.platforms)
+        }, this);
     }
 
     update() {
@@ -56,9 +58,8 @@ class Play extends Phaser.Scene {
             
             this.graphics.clear();
             //clear was removing lineStyle
-            this.graphics.lineStyle(2, 0x00ff00);
+            this.graphics.lineStyle(1, 0x00ff00);
             this.graphics.strokeLineShape(this.line);
-            console.log(this.line);
         }
     }
 
@@ -67,9 +68,18 @@ class Play extends Phaser.Scene {
         this.line.y1 = pointer.worldY;
         this.plotting = true;
     }
-    stopDrawing(pointer) {
-        /* this.line.x2 = pointer.worldX;;
-        this.line.y2 = pointer.worldY; */
+    stopDrawing(pointer, layer) {
+        this.line.x2 = pointer.worldX;;
+        this.line.y2 = pointer.worldY;
+
+        this.tileHits = layer.getTilesWithinShape(this.line);
+
+        // we check if the platforms are hit by the line
+        if (this.tileHits.length > 0) {
+            this.tileHits.forEach(tile => {
+                tile.index !== -1 ? console.log('platform hit') : '';
+            });
+        }
         this.plotting = false;
     }
     
