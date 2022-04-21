@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import initAnimations from './anims/playerAnims';
 
 import collidable from '../mixins/collidable';
+import HealthBar from '../hud/HealthBar';
 
 class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y) {
@@ -32,6 +33,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.setCollideWorldBounds(true);
 
         initAnimations(this.scene.anims);
+
+        const healthBar = new HealthBar(this.scene, 0, 0, 200, 5, 100, 100);
+        console.log(healthBar);
+        // healthBar.updateHealthBar(50);
     }
 
     initEvents() {
@@ -82,7 +87,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.bounceOff();
 
         //alternative to scene.time.addEvent
-        this.scene.time.delayedCall(250, () => this.hasBeenHit = false);
+        this.scene.time.delayedCall(250, () => {
+            this.hasBeenHit = false;
+        });
 
         /* this.scene.time.addEvent({
             delay: 250,
@@ -92,8 +99,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             loop : false
         }); */
     }
+    // add tween to the player
+
     bounceOff() {
-        this.playDamageTween();
         this.body.touching.right ? 
             this.setVelocityX(-this.bounceVelocity) :
             this.setVelocityX(this.bounceVelocity);
@@ -103,13 +111,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     playDamageTween() {
         console.log('playing tween?');
-        this.scene.tweens.add({
-            targets: this,
-            duration : 100,
-            repeat: 4,
-            tint : 0xffffff
+
+        const tween = this.scene.tweens.add({
+            targets: this.body,
+            duration : 250,
+            ease: 'Linear',
+            repeat: -1,
+            yoyo : true
         });
-        console.log(this);
+
+        tween.play();
     }
 }
 
