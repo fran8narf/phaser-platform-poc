@@ -34,7 +34,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         initAnimations(this.scene.anims);
 
-        const healthBar = new HealthBar(this.scene, 0, 0, 200, 5, 100, 100);
+        const healthBar = new HealthBar(
+            this.scene,
+            this.scene.config.leftTopCorner.x,
+            this.scene.config.leftTopCorner.y,
+            100,
+            5,
+            100,
+            100
+            );
         console.log(healthBar);
         // healthBar.updateHealthBar(50);
     }
