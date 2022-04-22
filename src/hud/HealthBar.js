@@ -19,14 +19,18 @@ class HealthBar {
         this.healthBar.fillRect(this.x, this.y, this.width, this.height);
         this.healthBar.fillStyle(0x00ff00, 1);
         this.healthBar.fillRect(this.x, this.y, this.width * (this.health / this.maxHealth), this.height);
+        console.log(this.width * (this.health / this.maxHealth));
     }
 
     updateHealthBar(health) {
+
         this.healthBar.clear();
         this.healthBar.fillStyle(0xFD3636, 1);
         this.healthBar.fillRect(this.x, this.y, this.width, this.height);
         this.healthBar.fillStyle(0x00ff00, 1);
         this.healthBar.fillRect(this.x, this.y, this.width * (health / this.maxHealth), this.height);
+        console.log(this.width * (health / this.maxHealth));
+        
     }
 
     /* constructor(scene, x, y ,health) {

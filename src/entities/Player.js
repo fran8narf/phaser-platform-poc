@@ -3,6 +3,7 @@ import initAnimations from './anims/playerAnims';
 
 import collidable from '../mixins/collidable';
 import HealthBar from '../hud/HealthBar';
+import Projectile from '../attacks/Projectile';
 
 class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y) {
@@ -34,17 +35,21 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         initAnimations(this.scene.anims);
 
-        const healthBar = new HealthBar(
+        this.healthBar = new HealthBar(
             this.scene,
-            this.scene.config.leftTopCorner.x,
-            this.scene.config.leftTopCorner.y,
+            this.scene.config.leftTopCorner.x + 10,
+            this.scene.config.leftTopCorner.y + 10,
             100,
-            5,
+            8,
             100,
             100
-            );
-        console.log(healthBar);
-        // healthBar.updateHealthBar(50);
+        );
+        
+        this.scene.input.keyboard.on('keydown-Q', () => {
+            console.log('pressing Q');
+            const projectile = new Projectile(this.scene, this.x, this.y, 'iceball');
+            projectile.fire();
+        });
     }
 
     initEvents() {
@@ -87,6 +92,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.play('run-right', true) : this.play('idle', true) :
             this.play('jump', true);
 
+        if (this.healthBar.health === 0) {
+            console.log('YOU DIED-GAMEOVER');
+            this.scene.scene.start('PlayScene');
+        }
+
     }
 
     takesHit(enemy) {
@@ -99,13 +109,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.hasBeenHit = false;
         });
 
-        /* this.scene.time.addEvent({
-            delay: 250,
-            callback: () => {
-                this.hasBeenHit = false;
-            },
-            loop : false
-        }); */
+        this.healthBar.updateHealthBar(this.healthBar.health -= 25);
     }
     // add tween to the player
 
@@ -118,8 +122,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     playDamageTween() {
-        console.log('playing tween?');
-
         const tween = this.scene.tweens.add({
             targets: this.body,
             duration : 250,

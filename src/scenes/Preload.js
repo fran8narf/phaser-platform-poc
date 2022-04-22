@@ -20,6 +20,8 @@ class Preload extends Phaser.Scene {
             frameHeight: 64,
             spacing: 32
         });
+
+        this.load.image('iceball', 'assets/weapons/iceball_001.png');
     }
 
     create() {

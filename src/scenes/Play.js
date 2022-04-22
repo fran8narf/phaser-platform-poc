@@ -76,7 +76,6 @@ class Play extends Phaser.Scene {
 
         const playerZones = map.getObjectLayer('player-zones');
         const enemySpawnPoints = map.getObjectLayer('enemy-spawn-points');
-        console.log('enemySpawnPoints', enemySpawnPoints);
 
         platformColliders.setCollisionByProperty({collides: true});
         // platformColliders.setCollisionByExclusion( -1, true );
