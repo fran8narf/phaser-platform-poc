@@ -26,4 +26,11 @@ export default anims => {
         frameRate: 14,
         repeat : 0
     });
+
+    anims.create({
+        key: 'hit-effect',
+        frames: anims.generateFrameNumbers('hit-effect', { start: 0, end: 4 }),
+        frameRate: 10,
+        repeat : 0
+    });
 }
