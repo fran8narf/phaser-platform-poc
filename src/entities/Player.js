@@ -4,6 +4,7 @@ import initAnimations from './anims/playerAnims';
 import collidable from '../mixins/collidable';
 import HealthBar from '../hud/HealthBar';
 import Projectile from '../attacks/Projectile';
+import Projectiles from '../attacks/Projectiles';
 
 class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y) {
@@ -27,6 +28,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.consecutiveJumps = 1;
         this.hasBeenHit = false;
         this.bounceVelocity = 350;
+        this.lastDirection = Phaser.Physics.Arcade.FACING_RIGHT;
 
         this.body.setGravityY(this.gravity);
         this.setSize(this.width-6, this.height -1);
@@ -45,11 +47,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             100
         );
         
+        this.projectiles = new Projectiles(this.scene);
         this.scene.input.keyboard.on('keydown-Q', () => {
-            console.log('pressing Q');
-            const projectile = new Projectile(this.scene, this.x, this.y, 'iceball');
-            projectile.fire();
+            this.projectiles.fireProjectile(this);
         });
+
     }
 
     initEvents() {
@@ -65,9 +67,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         const isUpJustDown = Phaser.Input.Keyboard.JustDown(up);
         
         if (left.isDown) {
+            this.lastDirection = Phaser.Physics.Arcade.FACING_LEFT;
             this.setVelocityX(-this.playerSpeed);
             this.setFlipX(true);
         } else if (right.isDown) {
+            this.lastDirection = Phaser.Physics.Arcade.FACING_RIGHT;
             this.play('run-right', true);
             this.setVelocityX(this.playerSpeed);
             this.setFlipX(false);
