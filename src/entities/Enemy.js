@@ -40,6 +40,9 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.setImmovable(true);
         this.setOrigin(.5, 1);
         this.setVelocityX(this.speed);
+
+        this.dmg = 15;
+        this.hp = 40;
     }
 
     initEvents() {
@@ -56,7 +59,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         if (!this.body || !this.body.onFloor()) { return; }
         this.currentPatrolDistance += Math.abs(this.body.deltaX());
         const { ray, hasHit  } = this.raycast(this.body, this.platformCollidersLayer,
-            {rayLength: 30, precission: 1, steepness: 1}
+            {rayLength: 20, precission: 5, steepness: .5}
         );
 
         if ((!hasHit  || this.currentPatrolDistance >= this.maxPatrolDistance) &&
@@ -69,6 +72,15 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         if (this.config.debug) {
             this.rayGraphics.clear();
             this.rayGraphics.strokeLineShape(ray);
+        }
+    }
+
+    takesHit(source) {
+        source.deliversHit(this);
+        this.hp -= source.dmg;
+
+        if (this.hp <= 0) {
+            console.log('enemy defeated');
         }
     }
 

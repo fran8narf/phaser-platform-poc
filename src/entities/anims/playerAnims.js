@@ -18,5 +18,12 @@ export default anims => {
         frames: anims.generateFrameNumbers('player', { start: 17, end: 23 }),
         frameRate: 5,
         repeat : -1
-    }); 
+    });
+
+    anims.create({
+        key: 'cast',
+        frames: anims.generateFrameNumbers('player', { start: 17, end: 23 }),
+        frameRate: 14,
+        repeat : 0
+    });
 }

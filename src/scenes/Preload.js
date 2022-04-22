@@ -8,6 +8,7 @@ class Preload extends Phaser.Scene {
         this.load.tilemapTiledJSON('map-1', 'assets/map-1.json');
         this.load.image('tileset1', 'assets/tileset1.png');
         this.load.image('tileset2', 'assets/tileset2.png');
+        this.load.image('iceball', 'assets/weapons/iceball_001.png');
 
         // this.load.image('player', 'assets/player/movements/idle01.png');
         this.load.spritesheet('player', 'assets/player/move_sprite_1.png', {
@@ -21,7 +22,12 @@ class Preload extends Phaser.Scene {
             spacing: 32
         });
 
-        this.load.image('iceball', 'assets/weapons/iceball_001.png');
+        this.load.spritesheet('cast', 'assets/player/throw_attack_sheet_1.png', {
+            frameWidth: 32,
+            frameHeight: 38,
+            spacing: 32
+        });
+
     }
 
     create() {

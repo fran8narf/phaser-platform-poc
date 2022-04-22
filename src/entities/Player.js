@@ -49,9 +49,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         
         this.projectiles = new Projectiles(this.scene);
         this.scene.input.keyboard.on('keydown-Q', () => {
+            this.play('cast', true);
             this.projectiles.fireProjectile(this);
         });
-
     }
 
     initEvents() {
@@ -91,6 +91,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // ignoreIfPlaying === true
         // this.play('idle', true);
 
+        if (this.anims.isPlaying && this.anims.getCurrentKey() === 'cast') {
+            return;
+        }
+
         onFloor ? 
             this.body.velocity.x !== 0 ?
                 this.play('run-right', true) : this.play('idle', true) :
@@ -113,7 +117,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.hasBeenHit = false;
         });
 
-        this.healthBar.updateHealthBar(this.healthBar.health -= 25);
+        this.healthBar.updateHealthBar(this.healthBar.health -= enemy.dmg);
     }
     // add tween to the player
 
