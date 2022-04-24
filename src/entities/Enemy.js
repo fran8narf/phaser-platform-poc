@@ -1,6 +1,8 @@
 import Phaser from 'phaser';
 import collidable from '../mixins/collidable';
 
+import anims from '../mixins/anims';
+
 class Enemy extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, key) {
         super(scene, x, y, key);
@@ -14,6 +16,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 
         // we copy all the collidable methods from the mixin to the player through 'this' context
         Object.assign(this, collidable);
+        Object.assign(this, anims);
     }
     
     init() {

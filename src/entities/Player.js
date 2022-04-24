@@ -5,6 +5,7 @@ import collidable from '../mixins/collidable';
 import HealthBar from '../hud/HealthBar';
 import Projectile from '../attacks/Projectile';
 import Projectiles from '../attacks/Projectiles';
+import anims from '../mixins/anims';
 
 class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y) {
@@ -17,6 +18,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         // we copy all the collidable methods from the mixin to the player through 'this' context
         Object.assign(this, collidable);
+        Object.assign(this, anims);
     }
     
     init() {
@@ -91,9 +93,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // ignoreIfPlaying === true
         // this.play('idle', true);
 
-        if (this.anims.isPlaying && this.anims.getCurrentKey() === 'cast') {
+        /* if (this.isPlayingAnims('cast')) {
             return;
-        }
+        } */
 
         onFloor ? 
             this.body.velocity.x !== 0 ?
